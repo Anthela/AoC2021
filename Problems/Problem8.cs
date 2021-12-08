@@ -65,10 +65,10 @@ namespace AdventOfCode.Problems
                 var seven = digits.Where(x => x.Length == 3).Single();
                 var four = digits.Where(x => x.Length == 4).Single();
                 var three = digits.Where(x => x.Length == 5 && x.Contains(one[0]) && x.Contains(one[1])).Single();
-                var five = digits.Where(x => x.Length == 5 && x != three && x.ToArray().Intersect(four.ToArray()).ToList().Count == 3).Single();
+                var five = digits.Where(x => x.Length == 5 && x != three && x.Intersect(four).ToList().Count == 3).Single();
                 var two = digits.Where(x => x.Length == 5 && x != three && x != five).Single();
 
-                digit.Top = seven.Where(x => x != one[0] && x != one[1]).Single();
+                digit.Top = seven.Except(one).Single();
                 digit.Mid = four.Intersect(five).Intersect(two).Single();
                 digit.TopLeft = four.Where(x => x != digit.Mid && !one.Contains(x)).Single();
                 digit.Bottom = two.Intersect(five).Where(x => x != digit.Top && x != digit.Mid).Single();
