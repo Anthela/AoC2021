@@ -36,13 +36,85 @@ namespace AdventOfCode.Problems
                 }
             }
 
-            return minis.Aggregate(0, (a,b) => a += 1 + b);
+            return minis.Aggregate(0, (a, b) => a += 1 + b);
         }
 
         public int DoPartB()
         {
             var lines = Utils.InputToStringArray("9").ToArray();
 
+            var table = CreateTableFromInput(lines);
+
+            var lowPoints = table.Where(x => x.Value.Marked).ToArray();
+
+            List<KeyValuePair<(int, int), TableItem>> usedItems = new();
+
+            List<int> result = new();
+
+            foreach (var item in lowPoints)
+            {
+                List<KeyValuePair<(int, int), TableItem>> currentLowPoints = new();
+
+                currentLowPoints.Add(item);
+
+                usedItems.Clear();
+
+                while (currentLowPoints.Any())
+                {
+                    var lowPoint = currentLowPoints.First();
+                    usedItems.Add(lowPoint);
+
+                    // Left
+                    if (lowPoint.Key.Item2 - 1 >= 0)
+                    {
+                        var position = (lowPoint.Key.Item1, lowPoint.Key.Item2 - 1);
+                        var leftItem = table[position];
+
+                        if (leftItem.Value != 9 && leftItem.Value >= lowPoint.Value.Value)
+                            currentLowPoints.Add(new KeyValuePair<(int, int), TableItem>(position, leftItem));
+                    }
+
+                    // Right
+                    if (lowPoint.Key.Item2 + 1 < lines[0].Length)
+                    {
+                        var position = (lowPoint.Key.Item1, lowPoint.Key.Item2 + 1);
+                        var rightItem = table[position];
+
+                        if (rightItem.Value != 9 && rightItem.Value >= lowPoint.Value.Value)
+                            currentLowPoints.Add(new KeyValuePair<(int, int), TableItem>(position, rightItem));
+                    }
+
+                    // Top
+                    if (lowPoint.Key.Item1 - 1 >= 0)
+                    {
+                        var position = (lowPoint.Key.Item1 - 1, lowPoint.Key.Item2);
+                        var topItem = table[position];
+
+                        if (topItem.Value != 9 && topItem.Value >= lowPoint.Value.Value)
+                            currentLowPoints.Add(new KeyValuePair<(int, int), TableItem>(position, topItem));
+                    }
+
+                    // Bottom
+                    if (lowPoint.Key.Item1 + 1 < lines.Length)
+                    {
+                        var position = (lowPoint.Key.Item1 + 1, lowPoint.Key.Item2);
+                        var bottomItem = table[position];
+
+                        if (bottomItem.Value != 9 && bottomItem.Value >= lowPoint.Value.Value)
+                            currentLowPoints.Add(new KeyValuePair<(int, int), TableItem>(position, bottomItem));
+                    }
+
+                    currentLowPoints = currentLowPoints.Except(usedItems).ToList();
+                }
+
+                result.Add(usedItems.Count);
+            }
+
+            return result.OrderByDescending(i => i).Take(3).Aggregate(1, (a, b) => a *= b);
+        }
+
+        private Dictionary<(int, int), TableItem> CreateTableFromInput(string[] lines)
+        {
             Dictionary<(int, int), TableItem> table = new();
 
             for (int i = 0; i < lines.Length; i++)
@@ -71,88 +143,7 @@ namespace AdventOfCode.Problems
                 }
             }
 
-            var lowPoints = table.Where(x => x.Value.Marked).ToArray();
-
-            List<KeyValuePair<(int, int), TableItem>> usedItems = new();
-
-            List<int> result = new();
-
-            foreach (var item in lowPoints)
-            {
-                List<KeyValuePair<(int, int), TableItem>> currentLowPoints = new();
-
-                currentLowPoints.Add(item);
-
-                usedItems.Clear();
-
-                while (currentLowPoints.Any())
-                {
-                    var lowPoint = currentLowPoints.First();
-                    usedItems.Add(lowPoint);
-
-                    // Left
-                    if (lowPoint.Key.Item2 - 1 >= 0)
-                    {
-                        var leftItem = table[(lowPoint.Key.Item1, lowPoint.Key.Item2 - 1)];
-
-                        if (!leftItem.Marked && leftItem.Value != 9 && leftItem.Value >= lowPoint.Value.Value)
-                        {
-                            leftItem.Marked = true;
-                            table[(lowPoint.Key.Item1, lowPoint.Key.Item2 - 1)] = leftItem;
-                            KeyValuePair<(int, int), TableItem> toAdd = new KeyValuePair<(int, int), TableItem>((lowPoint.Key.Item1, lowPoint.Key.Item2 - 1), leftItem);
-                            currentLowPoints.Add(toAdd);
-                        }
-                    }
-
-                    // Right
-                    if (lowPoint.Key.Item2 + 1 < lines[0].Length)
-                    {
-                        var rightItem = table[(lowPoint.Key.Item1, lowPoint.Key.Item2 + 1)];
-
-                        if (!rightItem.Marked && rightItem.Value != 9 && rightItem.Value >= lowPoint.Value.Value)
-                        {
-                            rightItem.Marked = true;
-                            table[(lowPoint.Key.Item1, lowPoint.Key.Item2 + 1)] = rightItem;
-                            KeyValuePair<(int, int), TableItem> toAdd = new KeyValuePair<(int, int), TableItem>((lowPoint.Key.Item1, lowPoint.Key.Item2 + 1), rightItem);
-                            currentLowPoints.Add(toAdd);
-                        }
-                    }
-
-                    // Top
-                    if (lowPoint.Key.Item1 - 1 >= 0)
-                    {
-                        var topItem = table[(lowPoint.Key.Item1 - 1, lowPoint.Key.Item2)];
-
-                        if (!topItem.Marked && topItem.Value != 9 && topItem.Value >= lowPoint.Value.Value)
-                        {
-                            topItem.Marked = true;
-                            table[(lowPoint.Key.Item1 - 1, lowPoint.Key.Item2)] = topItem;
-                            KeyValuePair<(int, int), TableItem> toAdd = new KeyValuePair<(int, int), TableItem>((lowPoint.Key.Item1 - 1, lowPoint.Key.Item2), topItem);
-                            currentLowPoints.Add(toAdd);
-                        }
-                    }
-
-                    // Bottom
-                    if (lowPoint.Key.Item1 + 1 < lines.Length)
-                    {
-                        var bottomItem = table[(lowPoint.Key.Item1 + 1, lowPoint.Key.Item2)];
-
-                        if (!bottomItem.Marked && bottomItem.Value != 9 && bottomItem.Value >= lowPoint.Value.Value)
-                        {
-                            bottomItem.Marked = true;
-                            table[(lowPoint.Key.Item1 + 1, lowPoint.Key.Item2)] = bottomItem;
-                            KeyValuePair<(int, int), TableItem> toAdd = new KeyValuePair<(int, int), TableItem>((lowPoint.Key.Item1 + 1, lowPoint.Key.Item2), bottomItem);
-                            currentLowPoints.Add(toAdd);
-                        }
-                    }
-
-                    currentLowPoints = currentLowPoints.Except(usedItems).ToList();
-                }
-
-                result.Add(usedItems.Count);
-            }
-
-            return result.OrderByDescending(i => i).Take(3).Aggregate(1, (a, b) => a *= b);
+            return table;
         }
     }
 }
