@@ -1,6 +1,4 @@
-﻿using AdventOfCode_2021.Problems.Model.Problem9;
-
-namespace AdventOfCode.Problems
+﻿namespace AdventOfCode.Problems
 {
     public class Problem9 : IProblem<int, int>
     {
