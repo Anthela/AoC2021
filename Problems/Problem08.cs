@@ -1,8 +1,8 @@
-﻿using AdventOfCode.Problems.Model.Problem8;
+﻿using AdventOfCode_2021.Problems.Model.Problem8;
 
-namespace AdventOfCode.Problems
+namespace AdventOfCode_2021.Problems
 {
-    public class Problem8 : IProblem<int, int>
+    public class Problem08 : IProblem<int, int>
     {
         public int DoPartA()
         {

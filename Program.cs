@@ -1,4 +1,4 @@
-﻿using AdventOfCode;
+﻿using AdventOfCode_2021;
 using Pastel;
 using System.Reflection;
 
@@ -6,7 +6,7 @@ bool runAllProblems = false;
 
 IEnumerable<Type> assemblies;
 
-var problemAssemblies = Assembly.GetExecutingAssembly().GetExportedTypes().Where(t => t.FullName!.StartsWith("AdventOfCode.Problems.Problem"));
+var problemAssemblies = Assembly.GetExecutingAssembly().GetExportedTypes().Where(t => t.FullName!.StartsWith("AdventOfCode_2021.Problems.Problem"));
 
 if (runAllProblems)
     assemblies = problemAssemblies;

@@ -1,6 +1,6 @@
-﻿namespace AdventOfCode.Problems
+﻿namespace AdventOfCode_2021.Problems
 {
-    public class Problem9 : IProblem<int, int>
+    public class Problem09 : IProblem<int, int>
     {
         public int DoPartA()
         {

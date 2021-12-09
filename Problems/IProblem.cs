@@ -1,4 +1,4 @@
-﻿namespace AdventOfCode.Problems
+﻿namespace AdventOfCode_2021.Problems
 {
     public interface IProblem<T, U>
     {

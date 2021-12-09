@@ -1,4 +1,4 @@
-﻿namespace AdventOfCode.Problems.Model.Problem8
+﻿namespace AdventOfCode_2021.Problems.Model.Problem8
 {
     public class Digits
     {
