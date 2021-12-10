@@ -8,12 +8,6 @@ namespace AdventOfCode_2021.Problems
         {
             var lines = Utils.InputToStringArray("08");
 
-            // vonal után 2, 3, 4, 7 hosszúak számolása
-            // 2 hosszú - 1
-            // 3 hosszú - 7
-            // 4 hosszú - 4
-            // 7 hosszú - 8
-
             List<string> afterLine = new List<string>();
 
             foreach (var item in lines)
