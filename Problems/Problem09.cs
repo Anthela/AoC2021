@@ -4,7 +4,7 @@
     {
         public int DoPartA()
         {
-            var lines = Utils.InputToStringArray("9").ToArray();
+            var lines = Utils.InputToStringArray("09").ToArray();
             List<int> minis = new();
 
             for (int i = 0; i < lines.Length; i++)
@@ -39,7 +39,7 @@
 
         public int DoPartB()
         {
-            var lines = Utils.InputToStringArray("9").ToArray();
+            var lines = Utils.InputToStringArray("09").ToArray();
 
             var table = CreateTableFromInput(lines);
 

@@ -19,22 +19,28 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Inputs\11_mini.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Inputs\11.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Inputs\10.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Inputs\8.txt">
+    <None Update="Inputs\08.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Inputs\8_mini.txt">
+    <None Update="Inputs\08_mini.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Inputs\9.txt">
+    <None Update="Inputs\09.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Inputs\10_mini.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Inputs\9_mini.txt">
+    <None Update="Inputs\09_mini.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

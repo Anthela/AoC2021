@@ -6,7 +6,7 @@ namespace AdventOfCode_2021.Problems
     {
         public int DoPartA()
         {
-            var lines = Utils.InputToStringArray("8");
+            var lines = Utils.InputToStringArray("08");
 
             // vonal után 2, 3, 4, 7 hosszúak számolása
             // 2 hosszú - 1
@@ -40,7 +40,7 @@ namespace AdventOfCode_2021.Problems
 
         public int DoPartB()
         {
-            var lines = Utils.InputToStringArray("8");
+            var lines = Utils.InputToStringArray("08");
 
             Dictionary<string, string> beforeAndAfterLine = new();
 
