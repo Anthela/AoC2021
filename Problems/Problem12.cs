@@ -62,18 +62,22 @@ namespace AdventOfCode_2021.Problems
                 {
                     var connectedCave = caves.Where(x => x.Name.Equals(connection)).Single();
 
-                    var miniCaveVisited = activePath.Where(x => x.Equals(x.ToLower()))
-                        .GroupBy(cave => cave)
-                        .Select(group => group.Count()).ToList();
-
-                    if (!connectedCave.Name.Equals("start") && (!activePath.Contains(connection) || connectedCave.Big || miniCaveVisited.All(x => x < 2)))
+                    if (!connectedCave.Name.Equals("start"))
                     {
-                        List<string> path = activePath.Append(connection).ToList();
-                        allPaths.Add(path);
+                        if (!activePath.Contains(connection) ||
+                            connectedCave.Big ||
+                            activePath.Where(x => x.Equals(x.ToLower()))
+                            .GroupBy(cave => cave)
+                            .Select(group => group.Count())
+                            .All(x => x < 2))
+                        {
+                            List<string> path = activePath.Append(connection).ToList();
+                            allPaths.Add(path);
 
-                        var nextCave = caves.Where(x => x.Name.Equals(connection)).Single();
+                            var nextCave = caves.Where(x => x.Name.Equals(connection)).Single();
 
-                        GoToNextCaveB(nextCave, path);
+                            GoToNextCaveB(nextCave, path);
+                        }
                     }
                 }
             }
