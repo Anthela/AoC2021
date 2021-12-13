@@ -4,7 +4,6 @@ namespace AdventOfCode_2021.Problems
 {
     public class Problem12 : IProblem<int, int>
     {
-        List<List<string>> allPaths;
         IEnumerable<Cave> caves;
 
         public int DoPartA()
@@ -12,13 +11,10 @@ namespace AdventOfCode_2021.Problems
             caves = ReadCaves();
 
             var start = caves.Where(x => x.Name.Equals("start")).Single();
-            allPaths = new();
             List<string> path = new();
             path.Add("start");
 
-            GoToNextCave(start, path);
-
-            return allPaths.Count;
+            return GoToNextCave(start, path);
         }
 
         public int DoPartB()
@@ -26,17 +22,16 @@ namespace AdventOfCode_2021.Problems
             caves = ReadCaves();
 
             var start = caves.Where(x => x.Name.Equals("start")).Single();
-            allPaths = new();
             List<string> path = new();
             path.Add("start");
 
-            GoToNextCaveB(start, path);
-
-            return allPaths.Count;
+            return GoToNextCaveB(start, path);
         }
 
-        private void GoToNextCave(Cave cave, List<string> activePath)
+        private int GoToNextCave(Cave cave, List<string> activePath)
         {
+            int result = 0;
+
             if (!cave.Name.Equals("end"))
             {
                 foreach (var connection in cave.ConnectedCaves)
@@ -46,18 +41,21 @@ namespace AdventOfCode_2021.Problems
                         List<string> path = activePath.Append(connection).ToList();
 
                         if (connection.Equals("end"))
-                            allPaths.Add(path);
+                            result++;
 
                         var nextCave = caves.Where(x => x.Name.Equals(connection)).Single();
 
-                        GoToNextCave(nextCave, path);
+                        result += GoToNextCave(nextCave, path);
                     }
                 }
             }
+
+            return result;
         }
 
-        private void GoToNextCaveB(Cave cave, List<string> activePath)
+        private int GoToNextCaveB(Cave cave, List<string> activePath)
         {
+            int result = 0;
             if (!cave.Name.Equals("end"))
             {
                 foreach (var connection in cave.ConnectedCaves)
@@ -76,15 +74,17 @@ namespace AdventOfCode_2021.Problems
                             List<string> path = activePath.Append(connection).ToList();
 
                             if (connection.Equals("end"))
-                                allPaths.Add(path);
+                                result++;
 
                             var nextCave = caves.Where(x => x.Name.Equals(connection)).Single();
 
-                            GoToNextCaveB(nextCave, path);
+                            result += GoToNextCaveB(nextCave, path);
                         }
                     }
                 }
             }
+
+            return result;
         }
 
         private List<Cave> ReadCaves()
