@@ -32,16 +32,15 @@ namespace AdventOfCode_2021.Problems
         {
             int result = 0;
 
-            if (!cave.Name.Equals("end"))
+            foreach (var connection in cave.ConnectedCaves)
             {
-                foreach (var connection in cave.ConnectedCaves)
+                if (connection.Equals("end"))
+                    result++;
+                else
                 {
                     if (!activePath.Contains(connection) || caves.Where(x => x.Name.Equals(connection)).Single().Big)
                     {
                         List<string> path = activePath.Append(connection).ToList();
-
-                        if (connection.Equals("end"))
-                            result++;
 
                         var nextCave = caves.Where(x => x.Name.Equals(connection)).Single();
 
@@ -56,25 +55,23 @@ namespace AdventOfCode_2021.Problems
         private int GoToNextCaveB(Cave cave, List<string> activePath)
         {
             int result = 0;
-            if (!cave.Name.Equals("end"))
-            {
-                foreach (var connection in cave.ConnectedCaves)
-                {
-                    var connectedCave = caves.Where(x => x.Name.Equals(connection)).Single();
 
-                    if (!connectedCave.Name.Equals("start"))
+            foreach (var connection in cave.ConnectedCaves)
+            {
+                if (connection.Equals("end"))
+                    result++;
+                else
+                {
+                    if (!connection.Equals("start"))
                     {
                         if (!activePath.Contains(connection) ||
-                            connectedCave.Big ||
+                            caves.Where(x => x.Name.Equals(connection)).Single().Big ||
                             activePath.Where(x => x.Equals(x.ToLower()))
                             .GroupBy(cave => cave)
                             .Select(group => group.Count())
                             .All(x => x < 2))
                         {
                             List<string> path = activePath.Append(connection).ToList();
-
-                            if (connection.Equals("end"))
-                                result++;
 
                             var nextCave = caves.Where(x => x.Name.Equals(connection)).Single();
 
