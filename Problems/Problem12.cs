@@ -18,7 +18,7 @@ namespace AdventOfCode_2021.Problems
 
             GoToNextCave(start, path);
 
-            return allPaths.Where(x => x.Contains("end")).ToArray().Length;
+            return allPaths.Count;
         }
 
         public int DoPartB()
@@ -32,7 +32,7 @@ namespace AdventOfCode_2021.Problems
 
             GoToNextCaveB(start, path);
 
-            return allPaths.Where(x => x.Contains("end")).ToList().Count;
+            return allPaths.Count;
         }
 
         private void GoToNextCave(Cave cave, List<string> activePath)
@@ -44,7 +44,9 @@ namespace AdventOfCode_2021.Problems
                     if (!activePath.Contains(connection) || caves.Where(x => x.Name.Equals(connection)).Single().Big)
                     {
                         List<string> path = activePath.Append(connection).ToList();
-                        allPaths.Add(path);
+
+                        if (connection.Equals("end"))
+                            allPaths.Add(path);
 
                         var nextCave = caves.Where(x => x.Name.Equals(connection)).Single();
 
@@ -72,7 +74,9 @@ namespace AdventOfCode_2021.Problems
                             .All(x => x < 2))
                         {
                             List<string> path = activePath.Append(connection).ToList();
-                            allPaths.Add(path);
+
+                            if (connection.Equals("end"))
+                                allPaths.Add(path);
 
                             var nextCave = caves.Where(x => x.Name.Equals(connection)).Single();
 
