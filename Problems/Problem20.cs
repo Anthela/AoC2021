@@ -4,11 +4,13 @@
     {
         public int DoPartA()
         {
-            var lines = Utils.InputToStringArray("20_mini");
+            var lines = Utils.InputToStringArray("20");
             var algorithm = lines.First();
             var inputArray = lines.Skip(2).ToArray();
             Dictionary<(int, int), bool> inputImage = new();
             Dictionary<(int, int), bool> outputImage = new();
+
+            bool shine = algorithm.First() == '#';
 
             for (int i = 0; i < inputArray.Length; i++)
             {
@@ -27,26 +29,10 @@
             {
                 for (int j = minX; j <= maxX; j++)
                 {
-                    outputImage[(i, j)] = GetPixelAtIndex(inputImage, algorithm, i, j);
+                    outputImage[(i, j)] = GetPixelAtIndex(inputImage, algorithm, i, j, shine, true);
                 }
             }
 
-            for (int i = outputImage.Select(x => x.Key.Item1).Min(); i <= outputImage.Select(x => x.Key.Item1).Max(); i++)
-            {
-                for (int j = outputImage.Select(x => x.Key.Item2).Min(); j <= outputImage.Select(x => x.Key.Item2).Max(); j++)
-                {
-                    if (outputImage[(i, j)])
-                        Console.Write("#");
-                    else
-                        Console.Write(".");
-                }
-                Console.WriteLine();
-            }
-
-            Console.WriteLine();
-            Console.WriteLine("----------------------------------------");
-            Console.WriteLine();
-            
             inputImage = outputImage;
             outputImage = new();
 
@@ -59,20 +45,8 @@
             {
                 for (int j = minX; j <= maxX; j++)
                 {
-                    outputImage[(i, j)] = GetPixelAtIndex(inputImage, algorithm, i, j);
+                    outputImage[(i, j)] = GetPixelAtIndex(inputImage, algorithm, i, j, shine);
                 }
-            }
-
-            for (int i = outputImage.Select(x => x.Key.Item1).Min(); i <= outputImage.Select(x => x.Key.Item1).Max(); i++)
-            {
-                for (int j = outputImage.Select(x => x.Key.Item2).Min(); j <= outputImage.Select(x => x.Key.Item2).Max(); j++)
-                {
-                    if (outputImage[(i, j)])
-                        Console.Write("#");
-                    else
-                        Console.Write(".");
-                }
-                Console.WriteLine();
             }
 
             return outputImage.Values.Where(x => x).Count();
@@ -80,10 +54,61 @@
 
         public int DoPartB()
         {
-            return 0;
+            var lines = Utils.InputToStringArray("20");
+            var algorithm = lines.First();
+            var inputArray = lines.Skip(2).ToArray();
+            Dictionary<(int, int), bool> inputImage = new();
+            Dictionary<(int, int), bool> outputImage = new();
+
+            bool shine = algorithm.First() == '#';
+
+            for (int i = 0; i < inputArray.Length; i++)
+            {
+                for (int j = 0; j < inputArray[i].Length; j++)
+                {
+                    inputImage[(i, j)] = inputArray[i][j] == '#';
+                }
+            }
+
+            var minY = -1;
+            var maxY = inputArray.Length;
+            var minX = -1;
+            var maxX = inputArray[0].Length;
+
+            for (int i = minY; i <= maxY; i++)
+            {
+                for (int j = minX; j <= maxX; j++)
+                {
+                    outputImage[(i, j)] = GetPixelAtIndex(inputImage, algorithm, i, j, shine, true);
+                }
+            }
+
+            inputImage = outputImage;
+            outputImage = new();
+
+            for (int k = 0; k < 49; k++)
+            {
+                minY = inputImage.Select(x => x.Key.Item1).Min() - 1;
+                maxY = inputImage.Select(x => x.Key.Item1).Max() + 1;
+                minX = inputImage.Select(x => x.Key.Item2).Min() - 1;
+                maxX = inputImage.Select(x => x.Key.Item2).Max() + 1;
+
+                for (int i = minY; i <= maxY; i++)
+                {
+                    for (int j = minX; j <= maxX; j++)
+                    {
+                        outputImage[(i, j)] = GetPixelAtIndex(inputImage, algorithm, i, j, shine, k % 2 == 1);
+                    }
+                }
+
+                inputImage = outputImage;
+                outputImage = new();
+            }
+
+            return inputImage.Values.Where(x => x).Count();
         }
 
-        private bool GetPixelAtIndex(Dictionary<(int, int), bool> inputImage, string algorithm, int i, int j)
+        private bool GetPixelAtIndex(Dictionary<(int, int), bool> inputImage, string algorithm, int i, int j, bool shine, bool firstRound = false)
         {
             string binarystring = string.Empty;
 
@@ -102,7 +127,20 @@
 
             foreach (var neighbour in neighbours)
             {
-                binarystring += inputImage.GetValueOrDefault(neighbour) ? "1" : "0";
+                if (shine)
+                {
+                    if (firstRound)
+                        binarystring += inputImage.GetValueOrDefault(neighbour) ? "1" : "0";
+                    else
+                    {
+                        if (inputImage.ContainsKey(neighbour))
+                            binarystring += inputImage[neighbour] ? "1" : "0";
+                        else
+                            binarystring += "1";
+                    }
+                }
+                else
+                    binarystring += inputImage.GetValueOrDefault(neighbour) ? "1" : "0";
             }
 
             var index = Convert.ToInt32(binarystring, 2);
